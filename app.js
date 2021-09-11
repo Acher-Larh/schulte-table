@@ -18,7 +18,6 @@ function makeTable(e) {
   activeTable = true;
 
   // get the reference for the body
-  // var body = document.getElementsByTagName("body")[0];
   const container = document.querySelector(".schulte-container");
 
   // selects the <table> element and creates a <tbody> element
