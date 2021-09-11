@@ -12,4 +12,4 @@ There can only be 1 table active at a time -> Right now if you click more than o
 TASKS LIST 
 - [x] add the complete cell functionality -> change the "state" of a cell once it has been "clicked".
 
-- [] "There can only be 1 table active at a time.
+- [ ] "There can only be 1 table active at a time.
