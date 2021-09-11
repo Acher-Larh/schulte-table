@@ -68,8 +68,7 @@ function completeCell() {
   const completedCells = [];
   document.querySelectorAll(".schulte-table td").
   forEach(e=>e.addEventListener("click", function (){
-    console.log(e.innerHTML);
+    e.classList.add("completedCell");
     completedCells.push(e.innerHTML);
-    console.log(completedCells);
   }));
 }

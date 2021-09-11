@@ -1,7 +1,3 @@
-/* .schulte-table {
-    pointer-events: none;
+.completedCell {
+    background-color: red;
 }
-
-.schulte-table td {
-    background: red;
-} */
