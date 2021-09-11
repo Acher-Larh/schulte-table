@@ -1,3 +1,8 @@
-.completedCell {
+.completed-cell {
     background-color: red;
 }
+.wrong-cell {
+    background-color: #000;
+    color: #fff;
+}
+
