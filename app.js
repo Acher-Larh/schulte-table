@@ -1,37 +1,34 @@
 // Selectors
 const startButton = document.querySelector(".start-button");
-const stopButton = document.querySelector(".stop-button");
-const continueButton = document.querySelector(".continue-button");
 const timer = document.getElementById('stopwatch');
 
 // Event Listeners
 startButton.addEventListener("click", makeTable);
-stopButton.addEventListener("click", stopTimer);
-console.log(continueButton);
-continueButton.addEventListener("click", startTimer);
 
 // Variables
 let activeTable = false;
 const tableSize = 25;
 
-let hr = 0;
-let min = 0;
-let sec = 0;
+let hr, min, sec = 0;
 let stoptime = true;
 
 // Functions
 function makeTable(e) {
+  //so that the website doesn't refresh all the time.
   e.preventDefault();  
 
+  // checks if there is an active table, if that is so, it will "return" and do nothing.
   if(activeTable != false) {
     return;
   }
-  resetTimer();
 
-  if (stoptime == true) {
-    stoptime = false;
-    timerCycle();
-  }
+  // implicates that there now is an active table.
+  activeTable = true;
+
+  // resets the timer after stoping it
+  resetTimer();
+  // starts the new timer
+  startTimer();
 
   // get the reference for the body
   const container = document.querySelector(".schulte-container");
@@ -97,25 +94,26 @@ function completeCell() {
   document.querySelectorAll(".schulte-table td").
   forEach(e=>e.addEventListener("click", function (){
   if(!e.classList.contains("completed-cell") && !e.classList.contains("wrong-cell")) {
+      //Changes the state of the target cell to one of "completed"
       e.classList.add("completed-cell");
       clearedCells.push(e.innerHTML);
+      // checks whether the table has been cleared.
       isTblClear();
   }else {
+    // changes the state of a cell to "wrong"
     e.classList.add("wrong-cell");
   }
-    
+
     // This "if" will check if the table has been cleared. if it's true then it will congrat the user and remove the table, else it will prevent the user form creating a new table.
     function isTblClear(){
       if (clearedCells.length === tableSize || clearedCells.length > tableSize) {
-        alert("Well done! it took you x seconds");
+        alert(`Well done! it took you ${timer.innerHTML} seconds`);
+        // indicates that there is no table active
         activeTable = false;
-        () => {
-          if (stoptime == false) {
-            stoptime = true;
-          }
-        };
+        resetTimer();
         removeTable();
       }else {
+        // reiterates that there already is a table active.
         activeTable = true;
       }
     }
@@ -124,27 +122,38 @@ function completeCell() {
   
 }
 
+//removes the old table.
 function removeTable() {
   const oldTable = document.querySelector(".schulte-table");
   oldTable.parentNode.removeChild(oldTable);
   
 }
 
-function startTimer(e) {
-  e.preventDefault();
+//Starts the timerCycle function and also changes the state of the stopwatch variable
+function startTimer() {
   if (stoptime == true) {
     stoptime = false;
     timerCycle();
     }
 }
 
-function stopTimer(e) {
-  e.preventDefault();
+//changes the state of the stopwatch variable
+function stopTimer() {
   if (stoptime == false) {
     stoptime = true;
   }
 }
 
+//Stops first, and then resets.
+function resetTimer() {
+  stopTimer();
+  timer.innerHTML = '00:00:00';
+  hr = 0;
+  min = 0;
+  sec = 0;
+}
+
+//adds the time and takes care of changing the seconds into minuts, and the minutes into hours when they hit 60secs and 60mins respectively.
 function timerCycle() {
   if (stoptime == false) {
     sec = parseInt(sec);
@@ -179,9 +188,3 @@ function timerCycle() {
 }
 }
 
-function resetTimer() {
-  timer.innerHTML = '00:00:00';
-  hr = 0;
-  min = 0;
-  sec = 0;
-}

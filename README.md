@@ -25,10 +25,14 @@ TASKS LIST
 - [x] remove the table after giving the score.
 - [x] make it so that the counter doesn't go higher than the table size.
 - [ ] "wrong cell" will also include cells that weren't clicked in order( first: 1, then: 2, etc.)
-- [ ] separate event functions from pasive ones.
+- [x] separate event functions from pasive ones.(timer) -> instead of  that I only left 1 button and added linked all the functions inside it. The only way to restart the game is by finishing it.
+
 * STYLING
 - [ ] style the schulte table
 - [ ] make the animations for when a cell is clicked("correct" and "wrong" animations).
 - [ ] style the navbar
 - [ ] style the body: the title and buttons.
 - [ ] style the footer.
+
+SOLUTIONS CENTER
+- To add the "wrong cell" functionality, we are going to make a Set object of numbers from 1 to tableSize, and then compare them to find whether the number clicked has been repeted.
