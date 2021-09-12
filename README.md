@@ -14,6 +14,7 @@ TASKS LIST
 * MARKUP 
 - [ ] make the navbar
 - [ ] make the footer
+- [ ] make a stopwatch
 
 * FUNCTIONALITY
 - [x] add the complete cell functionality -> change the "state" of a cell once it has been "clicked".
@@ -23,8 +24,8 @@ TASKS LIST
 - [ ] in the alert give the score and whether or not it's a record. 
 - [x] remove the table after giving the score.
 - [x] make it so that the counter doesn't go higher than the table size.
-- [ ] make the navbar responsible so that it becomes a hamburger button when the screen shrunks.
-
+- [ ] "wrong cell" will also include cells that weren't clicked in order( first: 1, then: 2, etc.)
+- [ ] separate event functions from pasive ones.
 * STYLING
 - [ ] style the schulte table
 - [ ] make the animations for when a cell is clicked("correct" and "wrong" animations).

@@ -1,21 +1,37 @@
 // Selectors
 const startButton = document.querySelector(".start-button");
+const stopButton = document.querySelector(".stop-button");
+const continueButton = document.querySelector(".continue-button");
+const timer = document.getElementById('stopwatch');
 
 // Event Listeners
 startButton.addEventListener("click", makeTable);
+stopButton.addEventListener("click", stopTimer);
+console.log(continueButton);
+continueButton.addEventListener("click", startTimer);
 
-// Logical Variables
+// Variables
 let activeTable = false;
 const tableSize = 25;
+
+let hr = 0;
+let min = 0;
+let sec = 0;
+let stoptime = true;
 
 // Functions
 function makeTable(e) {
   e.preventDefault();  
+
   if(activeTable != false) {
     return;
   }
+  resetTimer();
 
-  activeTable = true;
+  if (stoptime == true) {
+    stoptime = false;
+    timerCycle();
+  }
 
   // get the reference for the body
   const container = document.querySelector(".schulte-container");
@@ -30,7 +46,7 @@ function makeTable(e) {
   // We make 5 rows and inside of them 5 cells each.
   for (let i = 0; i < 5; i++) {
     // creates a table row
-    let row = document.createElement("tr");
+    const row = document.createElement("tr");
 
       // a loop to create 5 cells on each row
       for (let j = 0; j < 5; j++) {
@@ -40,7 +56,7 @@ function makeTable(e) {
         const randomItem = numbers[randomNumber];
 
         // We create the cell
-        let cell = document.createElement("td");
+        const cell = document.createElement("td");
         // We make a text node(the random item to which we will add 1) to the cell 
         let cellText = document.createTextNode(randomItem+1);
         // We append the text node to the cell
@@ -86,16 +102,18 @@ function completeCell() {
       isTblClear();
   }else {
     e.classList.add("wrong-cell");
-    console.log(e)
   }
-    console.log(clearedCells.length);
-    console.log(tableSize);
     
     // This "if" will check if the table has been cleared. if it's true then it will congrat the user and remove the table, else it will prevent the user form creating a new table.
     function isTblClear(){
       if (clearedCells.length === tableSize || clearedCells.length > tableSize) {
         alert("Well done! it took you x seconds");
         activeTable = false;
+        () => {
+          if (stoptime == false) {
+            stoptime = true;
+          }
+        };
         removeTable();
       }else {
         activeTable = true;
@@ -110,4 +128,60 @@ function removeTable() {
   const oldTable = document.querySelector(".schulte-table");
   oldTable.parentNode.removeChild(oldTable);
   
+}
+
+function startTimer(e) {
+  e.preventDefault();
+  if (stoptime == true) {
+    stoptime = false;
+    timerCycle();
+    }
+}
+
+function stopTimer(e) {
+  e.preventDefault();
+  if (stoptime == false) {
+    stoptime = true;
+  }
+}
+
+function timerCycle() {
+  if (stoptime == false) {
+    sec = parseInt(sec);
+    min = parseInt(min);
+    hr = parseInt(hr);
+
+    sec = sec + 1;
+
+    if (sec == 60) {
+      min = min + 1;
+      sec = 0;
+    }
+    if (min == 60) {
+      hr = hr + 1;
+      min = 0;
+      sec = 0;
+    }
+
+    if (sec < 10 || sec == 0) {
+      sec = '0' + sec;
+    }
+    if (min < 10 || min == 0) {
+      min = '0' + min;
+    }
+    if (hr < 10 || hr == 0) {
+      hr = '0' + hr;
+    }
+
+  timer.innerHTML = hr + ':' + min + ':' + sec;
+
+  setTimeout("timerCycle()", 1000);
+}
+}
+
+function resetTimer() {
+  timer.innerHTML = '00:00:00';
+  hr = 0;
+  min = 0;
+  sec = 0;
 }
