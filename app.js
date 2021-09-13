@@ -12,6 +12,10 @@ const tableSize = 25;
 let hr, min, sec = 0;
 let stoptime = true;
 
+// creating the cells content: numbers from 0 to 24(we will add 1 to that array element so that it goes from 1 to 25)
+const numbers = Array.from({length: tableSize}, (_, index) => index + 1);
+console.log(numbers);
+
 // Functions
 function makeTable(e) {
   //so that the website doesn't refresh all the time.
@@ -37,9 +41,7 @@ function makeTable(e) {
   const tbl = document.createElement("table");
   const tblBody = document.createElement("tbody");
 
-  // creating the cells content: numbers from 0 to 24(we will add 1 to that array element so that it goes from 1 to 25)
-  const numbers = [...Array(25).keys()];
-  
+
   // We make 5 rows and inside of them 5 cells each.
   for (let i = 0; i < 5; i++) {
     // creates a table row
@@ -55,7 +57,7 @@ function makeTable(e) {
         // We create the cell
         const cell = document.createElement("td");
         // We make a text node(the random item to which we will add 1) to the cell 
-        let cellText = document.createTextNode(randomItem+1);
+        let cellText = document.createTextNode(randomItem);
         // We append the text node to the cell
         cell.appendChild(cellText);
         // We append the cell to the row
@@ -89,16 +91,23 @@ function makeTable(e) {
 
 // This function will add the elements cells that have been "clicked" and will put their innerHtml into an array.
 function completeCell() {
-
   const clearedCells = [];
+  let i = 1;
   document.querySelectorAll(".schulte-table td").
   forEach(e=>e.addEventListener("click", function (){
-  if(!e.classList.contains("completed-cell") && !e.classList.contains("wrong-cell")) {
+    if(!e.classList.contains("completed-cell") && !e.classList.contains("wrong-cell") && i === parseInt(e.innerHTML)) {
       //Changes the state of the target cell to one of "completed"
       e.classList.add("completed-cell");
-      clearedCells.push(e.innerHTML);
+      clearedCells.push(parseInt(e.innerHTML));
+      
+      document.querySelectorAll(".wrong-cell").forEach(element=> {
+        element.classList.remove("wrong-cell");
+      });
+
       // checks whether the table has been cleared.
-      isTblClear();
+      i++;
+      isTblClear();      
+
   }else {
     // changes the state of a cell to "wrong"
     e.classList.add("wrong-cell");
@@ -107,7 +116,7 @@ function completeCell() {
     // This "if" will check if the table has been cleared. if it's true then it will congrat the user and remove the table, else it will prevent the user form creating a new table.
     function isTblClear(){
       if (clearedCells.length === tableSize || clearedCells.length > tableSize) {
-        alert(`Well done! it took you ${timer.innerHTML} seconds`);
+        alert(`Well done! it took you ${sec+min*60+hr*3600} seconds`);
         // indicates that there is no table active
         activeTable = false;
         resetTimer();
