@@ -12,23 +12,28 @@ There can only be 1 table active at a time -> Right now if you click more than o
 TASKS LIST 
 
 * MARKUP 
-- [ ] make the navbar
-- [ ] make the footer
-- [ ] make a stopwatch
+- [x] make the navbar
+- [x] make the footer
+- [x] make a stopwatch
 
 * FUNCTIONALITY
-- [x] add the complete cell functionality -> change the "state" of a cell once it has been "clicked".
-
+- [x] add the complete-cell functionality -> change the "state" of a cell once it has been "clicked".
 - [x] "There can only be 1 table active at a time.
-- [x] Congratulate de user if he succesfully cleared the table
+- [x] Congratulate de user if he succesfully cleared the table + give the time it took.
 - [ ] in the alert give the score and whether or not it's a record. 
 - [x] remove the table after giving the score.
 - [x] make it so that the counter doesn't go higher than the table size.
-- [ ] "wrong cell" will also include cells that weren't clicked in order( first: 1, then: 2, etc.)
-- [ ] separate event functions from pasive ones.
+- [x] "wrong cell" will also include cells that weren't clicked in order( first: 1, then: 2, etc.)
+- [x] separate event functions from pasive ones.(timer) -> instead of  that I only left 1 button and added linked all the functions inside it. The only way to restart the game is by finishing it.
+- [ ] make a "pause" button -> It should "freeze" the table; to do that we are going to add a class to the table and style it with a "display: none" or "visibility: hidden".
+- [ ] make it so that the user can click on the same key more than once. -> remove the state of wrong cell 2 seconds after its been applied.
+
 * STYLING
-- [ ] style the schulte table
+- [x] style the schulte table
 - [ ] make the animations for when a cell is clicked("correct" and "wrong" animations).
-- [ ] style the navbar
-- [ ] style the body: the title and buttons.
-- [ ] style the footer.
+- [x] style the navbar
+- [x] style the body: the title and buttons.
+- [x] style the footer.
+
+SOLUTIONS CENTER
+- To add the "wrong cell" functionality, we are going to make a Set object of numbers from 1 to tableSize, and then compare them to find whether the number clicked has been repeted. -> didn't do it, the actual solution has better functionality.
