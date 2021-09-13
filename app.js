@@ -95,7 +95,6 @@ function completeCell() {
   let i = 1;
   document.querySelectorAll(".schulte-table td").
   forEach(e=>e.addEventListener("click", function (){
-<<<<<<< HEAD
     if(!e.classList.contains("completed-cell") && !e.classList.contains("wrong-cell") && i === parseInt(e.innerHTML)) {
       //Changes the state of the target cell to one of "completed"
       e.classList.add("completed-cell");
@@ -109,14 +108,6 @@ function completeCell() {
       i++;
       isTblClear();      
 
-=======
-  if(!e.classList.contains("completed-cell") && !e.classList.contains("wrong-cell")) {
-      //Changes the state of the target cell to one of "completed"
-      e.classList.add("completed-cell");
-      clearedCells.push(e.innerHTML);
-      // checks whether the table has been cleared.
-      isTblClear();
->>>>>>> 8f07a2c17f7c277bd50eb38a6bb60d75ff14c8ee
   }else {
     // changes the state of a cell to "wrong"
     e.classList.add("wrong-cell");
@@ -125,11 +116,7 @@ function completeCell() {
     // This "if" will check if the table has been cleared. if it's true then it will congrat the user and remove the table, else it will prevent the user form creating a new table.
     function isTblClear(){
       if (clearedCells.length === tableSize || clearedCells.length > tableSize) {
-<<<<<<< HEAD
         alert(`Well done! it took you ${sec+min*60+hr*3600} seconds`);
-=======
-        alert(`Well done! it took you ${timer.innerHTML} seconds`);
->>>>>>> 8f07a2c17f7c277bd50eb38a6bb60d75ff14c8ee
         // indicates that there is no table active
         activeTable = false;
         resetTimer();
