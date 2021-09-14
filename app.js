@@ -1,15 +1,21 @@
 // Selectors
 const startButton = document.querySelector(".start-button");
+const pauseButton = document.querySelector(".pause-button");
 const timer = document.getElementById('stopwatch');
+const recordList = document.querySelector(".record-list");
 
 // Event Listeners
 startButton.addEventListener("click", makeTable);
+pauseButton.addEventListener("click", pauseTimer);
+document.addEventListener('DOMContentLoaded', getTodos);
 
 // Variables
 let activeTable = false;
 const tableSize = 25;
 
-let hr, min, sec = 0;
+let hr = 0,
+    min = 0,
+    sec = 0;
 let stoptime = true;
 
 // creating the cells content: numbers from 0 to 24(we will add 1 to that array element so that it goes from 1 to 25)
@@ -95,32 +101,44 @@ function completeCell() {
   let i = 1;
   document.querySelectorAll(".schulte-table td").
   forEach(e=>e.addEventListener("click", function (){
-    if(!e.classList.contains("completed-cell") && !e.classList.contains("wrong-cell") && i === parseInt(e.innerHTML)) {
-      //Changes the state of the target cell to one of "completed"
-      e.classList.add("completed-cell");
+    if(i === parseInt(e.innerHTML)) {
+      //Changes the state of the target cell to one of "correct"
+      if(e.classList.contains("wrong-cell")) {
+        e.classList.replace("wrong-cell", "correct-cell");
+      }else {
+        e.classList.add("correct-cell");
+      }
       clearedCells.push(parseInt(e.innerHTML));
-      
-      document.querySelectorAll(".wrong-cell").forEach(element=> {
-        element.classList.remove("wrong-cell");
-      });
+
+      i++;
 
       // checks whether the table has been cleared.
-      i++;
       isTblClear();      
 
-  }else {
-    // changes the state of a cell to "wrong"
-    e.classList.add("wrong-cell");
-  }
+    }else {
+      // changes the state of a cell to "wrong"
+      // switch (){}
+      if(e.classList.contains("correct-cell")) {
+        e.classList.replace("correct-cell", "wrong-cell");
+      }else if(e.classList.contains("wrong-cell")){
+        e.classList.remove("wrong-cell");
+        setTimeout(()=>{e.classList.add("wrong-cell")}, 0.1);
+      }else {
+        e.classList.add("wrong-cell");
+      }
+    }
 
     // This "if" will check if the table has been cleared. if it's true then it will congrat the user and remove the table, else it will prevent the user form creating a new table.
     function isTblClear(){
       if (clearedCells.length === tableSize || clearedCells.length > tableSize) {
-        alert(`Well done! it took you ${sec+min*60+hr*3600} seconds`);
+        alert(`Well done! it took you ${parseInt(min)} minutes and ${sec} seconds `);
         // indicates that there is no table active
         activeTable = false;
+        saveLocalTodos(sec+min*60+hr*3600);
         resetTimer();
         removeTable();
+        
+        
       }else {
         // reiterates that there already is a table active.
         activeTable = true;
@@ -135,6 +153,7 @@ function completeCell() {
 function removeTable() {
   const oldTable = document.querySelector(".schulte-table");
   oldTable.parentNode.removeChild(oldTable);
+  window.location.reload();
   
 }
 
@@ -151,6 +170,22 @@ function stopTimer() {
   if (stoptime == false) {
     stoptime = true;
   }
+}
+
+function pauseTimer() {  
+  const pButton = document.querySelector(".pause-button") ? document.querySelector(".pause-button") : document.querySelector(".continue-button");
+
+  if(pButton.classList.contains("pause-button") && activeTable===true){
+    stoptime = true;
+    pButton.classList.replace("pause-button", "continue-button");
+    document.querySelector(".schulte-table").classList.add("pause");
+  }else if(pButton.classList.contains("continue-button") && activeTable===true){
+    pButton.classList.replace("continue-button", "pause-button");
+    document.querySelector(".schulte-table").classList.remove("pause");
+    stoptime = false;
+    timerCycle();
+  }
+  
 }
 
 //Stops first, and then resets.
@@ -197,3 +232,43 @@ function timerCycle() {
 }
 }
 
+
+function saveLocalTodos(record){
+  //CHECK whether there is something in the storage
+  let records;
+  if(localStorage.getItem('records') === null){
+      records = [];
+  }else{
+      records = JSON.parse(localStorage.getItem('records'));
+  }
+
+  records.push(record);
+  localStorage.setItem('records', JSON.stringify(records));
+}
+
+function getTodos(){
+  let records;
+  //CHECK whether there is something in the storage
+  if(localStorage.getItem('records') === null){
+      records = [];
+  }else{
+      records = JSON.parse(localStorage.getItem('records'));
+  }
+  records.forEach((record)=>{
+      //Todo DIV
+      const recordDiv = document.createElement('div');
+      recordDiv.classList.add('record');
+      //Create LI
+      const newTodo = document.createElement('li');
+      newTodo.innerText = record;
+      newTodo.classList.add('record-item');
+      recordDiv.appendChild(newTodo);
+      //CHECK TRASH BUTTON
+      const trashButton = document.createElement("button");
+      trashButton.innerHTML = '<i class="fas fa-trash"></i>';
+      trashButton.classList.add("trash-btn");
+      recordDiv.appendChild(trashButton);
+      //APPEND TO LIST
+      recordList.appendChild(recordDiv);
+  });
+}

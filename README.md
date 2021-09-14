@@ -20,20 +20,27 @@ TASKS LIST
 - [x] add the complete-cell functionality -> change the "state" of a cell once it has been "clicked".
 - [x] "There can only be 1 table active at a time.
 - [x] Congratulate de user if he succesfully cleared the table + give the time it took.
-- [ ] in the alert give the score and whether or not it's a record. 
 - [x] remove the table after giving the score.
 - [x] make it so that the counter doesn't go higher than the table size.
 - [x] "wrong cell" will also include cells that weren't clicked in order( first: 1, then: 2, etc.)
 - [x] separate event functions from pasive ones.(timer) -> instead of  that I only left 1 button and added linked all the functions inside it. The only way to restart the game is by finishing it.
-- [ ] make a "pause" button -> It should "freeze" the table; to do that we are going to add a class to the table and style it with a "display: none" or "visibility: hidden".
-- [ ] make it so that the user can click on the same key more than once. -> remove the state of wrong cell 2 seconds after its been applied.
+- [x] make a "pause" button -> It should "freeze" the table; to do that we are going to add a class to the table and style it with a "display: none" or "visibility: hidden". It should also stop the stopwatch.
+- [x] make it so that the user can click on the same key more than once. -/> remove the state of wrong cell 2 seconds after its been applied. -> instead of that, I changed the "logic" behind the states; each time the user clicks on a cell the filter will check if it's the right one, if it is, then it will remove the wrong-cell state of this cell and apply to it the correct-cell state. And if it's the wrong one, it will remove both states if the cell has any, and then, it will apply the wrong-cell state.
+- [ ] in the alert give the score and whether or not it's a record. 
+- [x] add all the scores to a table, and save them in local memory so that after reloading the page it stays saved.
+- [ ] add the remove record functionality to the records table
 
 * STYLING
 - [x] style the schulte table
-- [ ] make the animations for when a cell is clicked("correct" and "wrong" animations).
+- [x] make the animations for when a cell is clicked("correct" and "wrong" animations).
 - [x] style the navbar
 - [x] style the body: the title and buttons.
 - [x] style the footer.
+- [ ] style the records table
 
-SOLUTIONS CENTER
+Think tank
 - To add the "wrong cell" functionality, we are going to make a Set object of numbers from 1 to tableSize, and then compare them to find whether the number clicked has been repeted. -> didn't do it, the actual solution has better functionality.
+
+- to check if a cell is correct, we ask if the clicked cell value equals to that of the index-counter, after doing that we add to that element the class correct-cell. if its false we want it to add the class wrong-cell.
+
+-a bug was that the cells would take two clicks in order to show the animation, I solved that by using the setTimeout function, and doing a couple logistic changes.
