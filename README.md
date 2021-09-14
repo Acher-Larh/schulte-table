@@ -1,5 +1,7 @@
 # schulte-table
-A web application that is used to practice speed reading.
+A web application that is used to practice speed reading. This is just a practice project to asimilate what I've learned this last month about html, css and js.
+
+- [ ] Make a mobile first version.
 
 Some inspiration:
 https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.zl1_FBcfNLWBzMll3hB7ZwHaFu%26pid%3DApi&f=1
