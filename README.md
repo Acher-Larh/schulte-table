@@ -28,7 +28,7 @@ TASKS LIST
 - [x] make it so that the user can click on the same key more than once. -/> remove the state of wrong cell 2 seconds after its been applied. -> instead of that, I changed the "logic" behind the states; each time the user clicks on a cell the filter will check if it's the right one, if it is, then it will remove the wrong-cell state of this cell and apply to it the correct-cell state. And if it's the wrong one, it will remove both states if the cell has any, and then, it will apply the wrong-cell state.
 - [ ] in the alert give the score and whether or not it's a record. 
 - [x] add all the scores to a table, and save them in local memory so that after reloading the page it stays saved.
-- [ ] add the remove record functionality to the records table
+- [ ] add the remove records functionality
 
 * STYLING
 - [x] style the schulte table
@@ -36,7 +36,7 @@ TASKS LIST
 - [x] style the navbar
 - [x] style the body: the title and buttons.
 - [x] style the footer.
-- [ ] style the records table
+- [x] style the records table
 
 Think tank
 - To add the "wrong cell" functionality, we are going to make a Set object of numbers from 1 to tableSize, and then compare them to find whether the number clicked has been repeted. -> didn't do it, the actual solution has better functionality.
