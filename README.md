@@ -31,7 +31,7 @@ TASKS LIST
 - [ ] in the alert give the score and whether or not it's a record. 
 - [x] add all the scores to a table, and save them in local memory so that after reloading the page it stays saved.
 - [ ] add the remove records functionality
-
+- [ ] make it so that if there are no records(undefined) the table cell will show no text.
 * STYLING
 - [x] style the schulte table
 - [x] make the animations for when a cell is clicked("correct" and "wrong" animations).
