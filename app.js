@@ -2,12 +2,12 @@
 const startButton = document.querySelector(".start-button");
 const pauseButton = document.querySelector(".pause-button");
 const timer = document.getElementById('stopwatch');
-const recordList = document.querySelector(".record-list");
+const recordList = document.querySelector(".records-container");
 
 // Event Listeners
 startButton.addEventListener("click", makeTable);
 pauseButton.addEventListener("click", pauseTimer);
-document.addEventListener('DOMContentLoaded', getTodos);
+// document.addEventListener('DOMContentLoaded', getRecords);
 
 // Variables
 let activeTable = false;
@@ -20,7 +20,6 @@ let stoptime = true;
 
 // creating the cells content: numbers from 0 to 24(we will add 1 to that array element so that it goes from 1 to 25)
 const numbers = Array.from({length: tableSize}, (_, index) => index + 1);
-console.log(numbers);
 
 // Functions
 function makeTable(e) {
@@ -92,6 +91,7 @@ function makeTable(e) {
   // We call the function that will triger each time a cell is "clicked".
   completeCell();
 
+
   
 }
 
@@ -134,7 +134,7 @@ function completeCell() {
         alert(`Well done! it took you ${parseInt(min)} minutes and ${sec} seconds `);
         // indicates that there is no table active
         activeTable = false;
-        saveLocalTodos(sec+min*60+hr*3600);
+        saveLocalRecords(sec+min*60+hr*3600);
         resetTimer();
         removeTable();
         
@@ -186,6 +186,7 @@ function pauseTimer() {
     timerCycle();
   }
   
+  getRecords();
 }
 
 //Stops first, and then resets.
@@ -233,42 +234,64 @@ function timerCycle() {
 }
 
 
-function saveLocalTodos(record){
+function saveLocalRecords(record){
   //CHECK whether there is something in the storage
   let records;
   if(localStorage.getItem('records') === null){
-      records = [];
+    records = [];
   }else{
-      records = JSON.parse(localStorage.getItem('records'));
+    records = JSON.parse(localStorage.getItem('records'));
   }
 
   records.push(record);
   localStorage.setItem('records', JSON.stringify(records));
 }
 
-function getTodos(){
+function getRecords(){
+  if(stoptime === false && document.querySelector(".records-table")){
+    const elem = document.querySelector(".records-table");
+    elem.parentNode.removeChild(elem);
+    return;
+  } else if(activeTable===false) {return;}
   let records;
   //CHECK whether there is something in the storage
   if(localStorage.getItem('records') === null){
-      records = [];
+    records = [];
   }else{
-      records = JSON.parse(localStorage.getItem('records'));
+    records = JSON.parse(localStorage.getItem('records'));
   }
-  records.forEach((record)=>{
-      //Todo DIV
-      const recordDiv = document.createElement('div');
-      recordDiv.classList.add('record');
-      //Create LI
-      const newTodo = document.createElement('li');
-      newTodo.innerText = record;
-      newTodo.classList.add('record-item');
-      recordDiv.appendChild(newTodo);
-      //CHECK TRASH BUTTON
-      const trashButton = document.createElement("button");
-      trashButton.innerHTML = '<i class="fas fa-trash"></i>';
-      trashButton.classList.add("trash-btn");
-      recordDiv.appendChild(trashButton);
-      //APPEND TO LIST
-      recordList.appendChild(recordDiv);
-  });
+  // get the reference for the body
+  const container = document.querySelector(".records-container");
+
+  // selects the <table> element and creates a <tbody> element
+  const tbl = document.createElement("table");
+  const tblBody = document.createElement("tbody");
+  const tblCaption = document.createElement("caption");
+  tblCaption.innerHTML = "Records table";
+  // We make 2 rows and inside of them 5 cells each.  
+  for (let i = 0; i < 2; i++) {
+    const row = document.createElement("tr");
+    // a loop to create 5 cells on each row
+    for (let j = 0; j < 4; j++) {
+      // We create the cell
+      const cell = document.createElement("td");
+      // We make a text node(the random item to which we will add 1) to the cell 
+      let cellText = document.createTextNode(records[i]);
+      // We append the text node to the cell
+      cell.appendChild(cellText);
+      // We append the cell to the row
+      row.appendChild(cell);
+    }
+    
+  // We add the row to the end of the table body
+  tblBody.appendChild(row);
+  }
+  // We put the <tbody> in the <table>
+  tbl.appendChild(tblCaption);
+  tbl.appendChild(tblBody);
+  // Adding a class to the table
+  tbl.classList.add("records-table");
+  // We append the <table> into the <body>
+  container.appendChild(tbl);
+  // We set the border attribute of the tbl;
 }

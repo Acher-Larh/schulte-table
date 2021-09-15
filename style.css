@@ -7,18 +7,18 @@
 
 body {
     display: flex;
-    max-width: 100vw;
-    max-height: 100vh;
-    min-height: 100vh;
+    width: 100vw;
+    height: 100vh;
     flex-direction: column;
     align-items: center;
 }
 footer {
     position: absolute;
-    bottom: 0;
-    width: 100vw;
-    padding: 20px 0;
+    bottom: 0px;
+    width: 100%;
+    height: 60px;
     text-align: center;
+    align-items: center;
     color: white;
     background-color: rgba(111, 116, 117, 0.877);
 }
@@ -111,6 +111,37 @@ h1 {
     
 }
 
+
+.records-table {
+    border-collapse: collapse;
+    text-align: center;
+    vertical-align: middle;
+    color: rgb(252, 255, 88);
+    
+}
+
+.records-table td{
+    padding: 5px 15px;
+    border: 1px solid rgb(208, 211, 25);
+    background: rgba(3, 127, 161, 0.877);
+}
+
+.records-table td:hover{
+    color: transparent;
+    background-image: url(./assets/remove-delete-svgrepo-com.svg);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    background-size: 50%;
+    background-blend-mode: saturation;
+}
+
+.records-table caption {
+    padding: 5px 0px;
+    background: rgba(3, 127, 161, 0.877);
+}
+
+
+
 @keyframes wrong-animation {
     from {background-color: rgba(231, 61, 61, 0.356);}
     to {background-color: #fff;}
@@ -123,6 +154,7 @@ h1 {
 .pause {
     display: none;
 }
+
 .non-select {
     -ms-user-select:none;
     -moz-user-select:none;
