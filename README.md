@@ -32,6 +32,7 @@ TASKS LIST
 - [x] add all the scores to a table, and save them in local memory so that after reloading the page it stays saved.
 - [x] add the remove records functionality
 - [x] make it so that if there are no records(undefined) the table cell will show no text.
+- [ ] once a record is removed it should show immediately not after the pause button is pressed
 
 * STYLING
 - [x] style the schulte table
