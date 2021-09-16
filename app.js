@@ -90,7 +90,7 @@ function makeTable(e) {
 
   // We call the function that will triger each time a cell is "clicked".
   completeCell();
-
+  // getRecords();
 
   
 }
@@ -242,17 +242,21 @@ function saveLocalRecords(record){
   }else{
     records = JSON.parse(localStorage.getItem('records'));
   }
-
+  
   records.push(record);
   localStorage.setItem('records', JSON.stringify(records));
 }
 
 function getRecords(){
+  
   if(stoptime === false && document.querySelector(".records-table")){
     const elem = document.querySelector(".records-table");
     elem.parentNode.removeChild(elem);
     return;
-  } else if(activeTable===false) {return;}
+  } else if(activeTable===false) {
+    return;
+  } 
+  
   let records;
   //CHECK whether there is something in the storage
   if(localStorage.getItem('records') === null){
@@ -260,14 +264,16 @@ function getRecords(){
   }else{
     records = JSON.parse(localStorage.getItem('records'));
   }
+  records.sort((a,b)=>{return a-b});
   // get the reference for the body
   const container = document.querySelector(".records-container");
-
+  
   // selects the <table> element and creates a <tbody> element
   const tbl = document.createElement("table");
   const tblBody = document.createElement("tbody");
   const tblCaption = document.createElement("caption");
-  tblCaption.innerHTML = "Records table";
+  tblCaption.innerHTML = "Records table (in seconds)";
+  let inx = 0;
   // We make 2 rows and inside of them 5 cells each.  
   for (let i = 0; i < 2; i++) {
     const row = document.createElement("tr");
@@ -275,16 +281,24 @@ function getRecords(){
     for (let j = 0; j < 4; j++) {
       // We create the cell
       const cell = document.createElement("td");
-      // We make a text node(the random item to which we will add 1) to the cell 
-      let cellText = document.createTextNode(records[i]);
+      // We add a text node to the cell if there is a record to put
+      let cellText;
+      if(records.indexOf(records[inx]) === inx){
+        cellText = document.createTextNode(records[inx]);
+      }else{
+        cellText = document.createTextNode(0);
+      }
+      
       // We append the text node to the cell
       cell.appendChild(cellText);
       // We append the cell to the row
       row.appendChild(cell);
+      
+      inx++;
     }
     
-  // We add the row to the end of the table body
-  tblBody.appendChild(row);
+    // We add the row to the end of the table body
+    tblBody.appendChild(row);
   }
   // We put the <tbody> in the <table>
   tbl.appendChild(tblCaption);
@@ -294,4 +308,26 @@ function getRecords(){
   // We append the <table> into the <body>
   container.appendChild(tbl);
   // We set the border attribute of the tbl;
+  removeRecord();
+}
+
+function removeRecord(){
+  const elem = document.querySelectorAll(".records-table td")
+  elem.forEach(e=>e.addEventListener("click", function (){
+    deleteLocalRecords(e);
+  }));
+  
+  function deleteLocalRecords(r){
+    //CHECK whether there is something in the storage
+    let records;
+    if(localStorage.getItem('records') === null){
+      records = [];
+    }else{
+      records = JSON.parse(localStorage.getItem('records'));
+    }
+    
+    let record = records.indexOf(parseInt(r.innerHTML));
+    records.splice(record, 1);
+    localStorage.setItem('records', JSON.stringify(records));
+  }
 }
