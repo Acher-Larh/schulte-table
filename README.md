@@ -30,8 +30,9 @@ TASKS LIST
 - [x] make it so that the user can click on the same key more than once. -/> remove the state of wrong cell 2 seconds after its been applied. -> instead of that, I changed the "logic" behind the states; each time the user clicks on a cell the filter will check if it's the right one, if it is, then it will remove the wrong-cell state of this cell and apply to it the correct-cell state. And if it's the wrong one, it will remove both states if the cell has any, and then, it will apply the wrong-cell state.
 - [ ] in the alert give the score and whether or not it's a record. 
 - [x] add all the scores to a table, and save them in local memory so that after reloading the page it stays saved.
-- [ ] add the remove records functionality
-- [ ] make it so that if there are no records(undefined) the table cell will show no text.
+- [x] add the remove records functionality
+- [x] make it so that if there are no records(undefined) the table cell will show no text.
+
 * STYLING
 - [x] style the schulte table
 - [x] make the animations for when a cell is clicked("correct" and "wrong" animations).
