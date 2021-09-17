@@ -7,12 +7,12 @@ const recordList = document.querySelector(".records-container");
 // Event Listeners
 startButton.addEventListener("click", makeTable);
 pauseButton.addEventListener("click", pauseTimer);
-// document.addEventListener('DOMContentLoaded', getRecords);
+document.addEventListener('DOMContentLoaded', getRecords);
 
 // Variables
 let activeTable = false;
 const tableSize = 25;
-
+let activeRecords = false;
 let hr = 0,
     min = 0,
     sec = 0;
@@ -20,7 +20,6 @@ let stoptime = true;
 
 // creating the cells content: numbers from 0 to 24(we will add 1 to that array element so that it goes from 1 to 25)
 const numbers = Array.from({length: tableSize}, (_, index) => index + 1);
-
 // Functions
 function makeTable(e) {
   //so that the website doesn't refresh all the time.
@@ -29,6 +28,9 @@ function makeTable(e) {
   // checks if there is an active table, if that is so, it will "return" and do nothing.
   if(activeTable != false) {
     return;
+  } else if(activeRecords === true){
+    const elem = document.querySelector(".records-table");
+    elem.parentNode.removeChild(elem);
   }
 
   // implicates that there now is an active table.
@@ -90,8 +92,6 @@ function makeTable(e) {
 
   // We call the function that will triger each time a cell is "clicked".
   completeCell();
-  // getRecords();
-
   
 }
 
@@ -130,15 +130,16 @@ function completeCell() {
 
     // This "if" will check if the table has been cleared. if it's true then it will congrat the user and remove the table, else it will prevent the user form creating a new table.
     function isTblClear(){
-      if (clearedCells.length === tableSize || clearedCells.length > tableSize) {
-        alert(`Well done! it took you ${parseInt(min)} minutes and ${sec} seconds `);
+      if (clearedCells.length === 1 || clearedCells.length > tableSize) {
         // indicates that there is no table active
         activeTable = false;
-        saveLocalRecords(sec+min*60+hr*3600);
+        const score = sec+min*60+hr*3600;
+        saveLocalRecords(score);
         resetTimer();
+        
         removeTable();
         
-        
+
       }else {
         // reiterates that there already is a table active.
         activeTable = true;
@@ -154,7 +155,142 @@ function removeTable() {
   const oldTable = document.querySelector(".schulte-table");
   oldTable.parentNode.removeChild(oldTable);
   window.location.reload();
+
   
+}
+
+function showScore(score){
+  if(activeRecords === false){
+    return;
+  }
+  const records = loadRecords();
+  const scoreHeading = document.createElement("div");
+  const container = document.querySelector(".records-container");
+  let record = parseInt(records[0]);
+  score = 5;
+  if(0 <= score && score < record){
+    scoreHeading.innerHTML = `${score} SECONDS <br>Well done, a RECORD!!`;
+
+  }else {
+    scoreHeading.innerHTML = "Good job, your score is: " + score;
+  }
+  scoreHeading.classList.add("score");
+  container.appendChild(scoreHeading);
+}
+
+function loadRecords(){
+  let records;
+  //CHECK whether there is something in the storage
+  if(localStorage.getItem('records') === null){
+    records = [];
+  }else{
+    records = JSON.parse(localStorage.getItem('records'));
+  }
+  records.sort((a,b)=>{return a-b});
+  return records;
+}
+
+function saveLocalRecords(record){
+  //CHECK whether there is something in the storage
+  let records;
+  if(localStorage.getItem('records') === null){
+    records = [];
+  }else{
+    records = JSON.parse(localStorage.getItem('records'));
+  }
+  
+  records.push(record);
+  localStorage.setItem('records', JSON.stringify(records));
+}
+
+
+
+
+
+function getRecords(){
+  activeRecords = true;
+
+  if(stoptime === false && document.querySelector(".records-table")){
+    const recordsTable = document.querySelector(".records-table");
+    recordsTable.parentNode.removeChild(recordsTable);
+    return;
+  } else if(document.querySelector(".records-table")){
+    const recordsTable = document.querySelector(".records-table");
+    recordsTable.parentNode.removeChild(recordsTable);
+  }
+
+
+  const records = loadRecords();
+  // get the reference for the body
+  const container = document.querySelector(".records-container");
+  
+  // selects the <table> element and creates a <tbody> element
+  const tbl = document.createElement("table");
+  const tblBody = document.createElement("tbody");
+  const tblCaption = document.createElement("caption");
+  tblCaption.innerHTML = "Records table (in seconds)";
+  let inx = 0;
+  // We make 2 rows and inside of them 5 cells each.  
+  for (let i = 0; i < 2; i++) {
+    const row = document.createElement("tr");
+    // a loop to create 5 cells on each row
+    for (let j = 0; j < 4; j++) {
+      // We create the cell
+      const cell = document.createElement("td");
+      // We add a text node to the cell if there is a record to put
+      let cellText;
+      if(records.indexOf(records[inx]) === inx){
+        cellText = document.createTextNode(records[inx]);
+      }else{
+        cellText = document.createTextNode(0);
+      }
+      
+      // We append the text node to the cell
+      cell.appendChild(cellText);
+      // We append the cell to the row
+      row.appendChild(cell);
+      
+      inx++;
+    }
+    
+    // We add the row to the end of the table body
+    tblBody.appendChild(row);
+  }
+  // We put the <tbody> in the <table>
+  tbl.appendChild(tblCaption);
+  tbl.appendChild(tblBody);
+  // Adding a class to the table
+  tbl.classList.add("records-table");
+  // We append the <table> into the <body>
+  container.appendChild(tbl);
+  // We set the border attribute of the tbl;
+  removeRecord();
+  
+}
+
+function removeRecord(){
+  const elem = document.querySelectorAll(".records-table td")
+  elem.forEach(e=>e.addEventListener("click", function (){
+    deleteLocalRecords(e);
+  }));
+  
+  function deleteLocalRecords(r){
+    //CHECK whether there is something in the storage
+    let records;
+    if(localStorage.getItem('records') === null){
+      records = [];
+    }else{
+      records = JSON.parse(localStorage.getItem('records'));
+    }
+    let record = records.indexOf(parseInt(r.innerHTML));
+    if(r.innerHTML != 0){
+      records.splice(record, 1);
+      localStorage.setItem('records', JSON.stringify(records));
+    } else{
+      return;
+    }
+    getRecords();
+  }
 }
 
 //Starts the timerCycle function and also changes the state of the stopwatch variable
@@ -185,7 +321,7 @@ function pauseTimer() {
     stoptime = false;
     timerCycle();
   }
-  
+
   getRecords();
 }
 
@@ -231,103 +367,4 @@ function timerCycle() {
 
   setTimeout("timerCycle()", 1000);
 }
-}
-
-
-function saveLocalRecords(record){
-  //CHECK whether there is something in the storage
-  let records;
-  if(localStorage.getItem('records') === null){
-    records = [];
-  }else{
-    records = JSON.parse(localStorage.getItem('records'));
-  }
-  
-  records.push(record);
-  localStorage.setItem('records', JSON.stringify(records));
-}
-
-function getRecords(){
-  
-  if(stoptime === false && document.querySelector(".records-table")){
-    const elem = document.querySelector(".records-table");
-    elem.parentNode.removeChild(elem);
-    return;
-  } else if(activeTable===false) {
-    return;
-  } 
-  
-  let records;
-  //CHECK whether there is something in the storage
-  if(localStorage.getItem('records') === null){
-    records = [];
-  }else{
-    records = JSON.parse(localStorage.getItem('records'));
-  }
-  records.sort((a,b)=>{return a-b});
-  // get the reference for the body
-  const container = document.querySelector(".records-container");
-  
-  // selects the <table> element and creates a <tbody> element
-  const tbl = document.createElement("table");
-  const tblBody = document.createElement("tbody");
-  const tblCaption = document.createElement("caption");
-  tblCaption.innerHTML = "Records table (in seconds)";
-  let inx = 0;
-  // We make 2 rows and inside of them 5 cells each.  
-  for (let i = 0; i < 2; i++) {
-    const row = document.createElement("tr");
-    // a loop to create 5 cells on each row
-    for (let j = 0; j < 4; j++) {
-      // We create the cell
-      const cell = document.createElement("td");
-      // We add a text node to the cell if there is a record to put
-      let cellText;
-      if(records.indexOf(records[inx]) === inx){
-        cellText = document.createTextNode(records[inx]);
-      }else{
-        cellText = document.createTextNode(0);
-      }
-      
-      // We append the text node to the cell
-      cell.appendChild(cellText);
-      // We append the cell to the row
-      row.appendChild(cell);
-      
-      inx++;
-    }
-    
-    // We add the row to the end of the table body
-    tblBody.appendChild(row);
-  }
-  // We put the <tbody> in the <table>
-  tbl.appendChild(tblCaption);
-  tbl.appendChild(tblBody);
-  // Adding a class to the table
-  tbl.classList.add("records-table");
-  // We append the <table> into the <body>
-  container.appendChild(tbl);
-  // We set the border attribute of the tbl;
-  removeRecord();
-}
-
-function removeRecord(){
-  const elem = document.querySelectorAll(".records-table td")
-  elem.forEach(e=>e.addEventListener("click", function (){
-    deleteLocalRecords(e);
-  }));
-  
-  function deleteLocalRecords(r){
-    //CHECK whether there is something in the storage
-    let records;
-    if(localStorage.getItem('records') === null){
-      records = [];
-    }else{
-      records = JSON.parse(localStorage.getItem('records'));
-    }
-    
-    let record = records.indexOf(parseInt(r.innerHTML));
-    records.splice(record, 1);
-    localStorage.setItem('records', JSON.stringify(records));
-  }
 }
