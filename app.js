@@ -135,17 +135,17 @@ function completeCell() {
 
     // This "if" will check if the table has been cleared. if it's true then it will congrat the user and remove the table, else it will prevent the user form creating a new table.
     function clearedTable(){
-      if (clearedCells.length === tableSize || clearedCells.length > tableSize) {
+      if (clearedCells.length === 1 || clearedCells.length > tableSize) {
         sec = Number(sec);
         min = Number(min);
         hr = Number(hr);
         // indicates that there is no table active
         activeTable = false;
         let score = (sec+min*60+hr*3600);
-        saveLocalRecords(score);
         removeTable(score);
+        saveLocalRecords(score);
         resetTimer();
-        
+        getRecords();
         
       }else {
         // reiterates that there already is a table active.
@@ -162,7 +162,6 @@ function removeTable(score) {
   const oldTable = document.querySelector(".schulte-table");
   oldTable.parentNode.removeChild(oldTable);
   showScore(score);
-  getRecords();
 }
 
 function showScore(score){
@@ -173,9 +172,9 @@ function showScore(score){
   const scoreHeading = document.createElement("div");
   const container = document.querySelector(".records-container");
   let record = Number(records[0]);
+  console.log(record + " . " + score);
   if(0 <= score && score < record){
     scoreHeading.innerHTML = `${score} SECONDS <br>Well done, a RECORD!!`;
-
   }else {
     scoreHeading.innerHTML = "Good job, your score is: " + score;
   }
