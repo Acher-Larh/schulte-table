@@ -28,7 +28,7 @@ TASKS LIST
 - [x] separate event functions from pasive ones.(timer) -> instead of  that I only left 1 button and added linked all the functions inside it. The only way to restart the game is by finishing it.
 - [x] make a "pause" button -> It should "freeze" the table; to do that we are going to add a class to the table and style it with a "display: none" or "visibility: hidden". It should also stop the stopwatch.
 - [x] make it so that the user can click on the same key more than once. -/> remove the state of wrong cell 2 seconds after its been applied. -> instead of that, I changed the "logic" behind the states; each time the user clicks on a cell the filter will check if it's the right one, if it is, then it will remove the wrong-cell state of this cell and apply to it the correct-cell state. And if it's the wrong one, it will remove both states if the cell has any, and then, it will apply the wrong-cell state.
-- [ ] in the alert give the score and whether or not it's a record. 
+- [x] in the alert give the score and whether or not it's a record. 
 - [x] add all the scores to a table, and save them in local memory so that after reloading the page it stays saved.
 - [x] add the remove records functionality
 - [x] make it so that if there are no records(undefined) the table cell will show no text.

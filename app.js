@@ -19,18 +19,23 @@ let hr = 0,
 let stoptime = true;
 
 // creating the cells content: numbers from 0 to 24(we will add 1 to that array element so that it goes from 1 to 25)
-const numbers = Array.from({length: tableSize}, (_, index) => index + 1);
+let numbers = Array.from({length: tableSize}, (_, index) => index + 1);
 // Functions
 function makeTable(e) {
   //so that the website doesn't refresh all the time.
-  e.preventDefault();  
+  e.preventDefault(); 
 
   // checks if there is an active table, if that is so, it will "return" and do nothing.
   if(activeTable != false) {
     return;
   } else if(activeRecords === true){
-    const elem = document.querySelector(".records-table");
-    elem.parentNode.removeChild(elem);
+    const recordTbl = document.querySelector(".records-table");
+    recordTbl.parentNode.removeChild(recordTbl);
+  }
+  if(document.querySelector(".score")){
+    const scoreElem = document.querySelector(".score");
+    scoreElem.parentNode.removeChild(scoreElem);
+    numbers = Array.from({length: tableSize}, (_, index) => index + 1);
   }
 
   // implicates that there now is an active table.
@@ -113,7 +118,7 @@ function completeCell() {
       i++;
 
       // checks whether the table has been cleared.
-      isTblClear();      
+      clearedTable();      
 
     }else {
       // changes the state of a cell to "wrong"
@@ -129,17 +134,19 @@ function completeCell() {
     }
 
     // This "if" will check if the table has been cleared. if it's true then it will congrat the user and remove the table, else it will prevent the user form creating a new table.
-    function isTblClear(){
-      if (clearedCells.length === 1 || clearedCells.length > tableSize) {
+    function clearedTable(){
+      if (clearedCells.length === tableSize || clearedCells.length > tableSize) {
+        sec = Number(sec);
+        min = Number(min);
+        hr = Number(hr);
         // indicates that there is no table active
         activeTable = false;
-        const score = sec+min*60+hr*3600;
+        let score = (sec+min*60+hr*3600);
         saveLocalRecords(score);
+        removeTable(score);
         resetTimer();
         
-        removeTable();
         
-
       }else {
         // reiterates that there already is a table active.
         activeTable = true;
@@ -151,12 +158,11 @@ function completeCell() {
 }
 
 //removes the old table.
-function removeTable() {
+function removeTable(score) {
   const oldTable = document.querySelector(".schulte-table");
   oldTable.parentNode.removeChild(oldTable);
-  window.location.reload();
-
-  
+  showScore(score);
+  getRecords();
 }
 
 function showScore(score){
@@ -166,8 +172,7 @@ function showScore(score){
   const records = loadRecords();
   const scoreHeading = document.createElement("div");
   const container = document.querySelector(".records-container");
-  let record = parseInt(records[0]);
-  score = 5;
+  let record = Number(records[0]);
   if(0 <= score && score < record){
     scoreHeading.innerHTML = `${score} SECONDS <br>Well done, a RECORD!!`;
 
@@ -198,14 +203,9 @@ function saveLocalRecords(record){
   }else{
     records = JSON.parse(localStorage.getItem('records'));
   }
-  
   records.push(record);
   localStorage.setItem('records', JSON.stringify(records));
 }
-
-
-
-
 
 function getRecords(){
   activeRecords = true;
@@ -230,6 +230,8 @@ function getRecords(){
   const tblCaption = document.createElement("caption");
   tblCaption.innerHTML = "Records table (in seconds)";
   let inx = 0;
+  let editRecords = records;
+
   // We make 2 rows and inside of them 5 cells each.  
   for (let i = 0; i < 2; i++) {
     const row = document.createElement("tr");
@@ -239,11 +241,13 @@ function getRecords(){
       const cell = document.createElement("td");
       // We add a text node to the cell if there is a record to put
       let cellText;
-      if(records.indexOf(records[inx]) === inx){
-        cellText = document.createTextNode(records[inx]);
-      }else{
+      
+      if(records[inx] == null){
         cellText = document.createTextNode(0);
-      }
+      }else {
+        cellText = document.createTextNode(records[inx]);
+      };
+      
       
       // We append the text node to the cell
       cell.appendChild(cellText);
@@ -337,9 +341,9 @@ function resetTimer() {
 //adds the time and takes care of changing the seconds into minuts, and the minutes into hours when they hit 60secs and 60mins respectively.
 function timerCycle() {
   if (stoptime == false) {
-    sec = parseInt(sec);
-    min = parseInt(min);
-    hr = parseInt(hr);
+    sec = Number(sec);
+    min = Number(min);
+    hr = Number(hr);
 
     sec = sec + 1;
 
