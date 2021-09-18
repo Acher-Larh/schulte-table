@@ -135,7 +135,7 @@ function completeCell() {
 
     // This "if" will check if the table has been cleared. if it's true then it will congrat the user and remove the table, else it will prevent the user form creating a new table.
     function clearedTable(){
-      if (clearedCells.length === 1 || clearedCells.length > tableSize) {
+      if (clearedCells.length === tableSize || clearedCells.length > tableSize) {
         sec = Number(sec);
         min = Number(min);
         hr = Number(hr);
